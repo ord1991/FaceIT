@@ -1,4 +1,0 @@
-  File "/app/main.py", line 158
-    elif file:
-    ^^^^
-SyntaxError: invalid syntax
