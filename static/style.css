@@ -1,0 +1,14 @@
+body { font-family: sans-serif; background: #f4f7f6; color: #2c3e50; margin: 0; padding: 20px; }
+.container { display: flex; gap: 20px; flex-wrap: wrap; }
+.side-panel { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
+.main-feed { flex: 2; min-width: 400px; }
+.card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #dfe6e9; }
+.video-container { background: #000; border-radius: 8px; overflow: hidden; text-align: center; }
+.video-container img { max-width: 100%; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; }
+.form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #dfe6e9; border-radius: 4px; }
+.btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.btn-primary { background: #3498db; color: #fff; }
+#overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; z-index: 10; }
+#registration-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 20px; border-radius: 8px; display: none; z-index: 11; width: 90%; max-width: 400px; }

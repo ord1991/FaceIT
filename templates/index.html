@@ -31,18 +31,18 @@
                 <h3>Add New User (Upload)</h3>
                 <form id="upload-form">
                     <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" id="upload-name" required>
+                        <label for="upload-name">Name</label>
+                        <input type="text" id="upload-name" placeholder="Enter full name" required>
                     </div>
                     <div class="form-group">
-                        <label>Status</label>
+                        <label for="upload-status">Status</label>
                         <select id="upload-status">
                             <option value="approved">Approved</option>
                             <option value="blacklisted">Blacklisted</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Image File</label>
+                        <label for="upload-file">Image File</label>
                         <input type="file" id="upload-file" accept="image/*" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Upload & Register</button>
@@ -74,15 +74,15 @@
     <div id="overlay"></div>
     <div id="registration-modal">
         <h3>Register Face</h3>
-        <img id="reg-preview" src="" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
+        <img id="reg-preview" src="" alt="Face crop for registration" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
         <form id="registration-form">
             <input type="hidden" id="reg-face-id">
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" id="reg-name" required>
+                <label for="reg-name">Name</label>
+                <input type="text" id="reg-name" placeholder="Enter full name" required>
             </div>
             <div class="form-group">
-                <label>Status</label>
+                <label for="reg-status">Status</label>
                 <select id="reg-status">
                     <option value="approved">Approved</option>
                     <option value="blacklisted">Blacklisted</option>
