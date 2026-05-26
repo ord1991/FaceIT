@@ -98,36 +98,51 @@ def generate_frames():
         processed_frame, results = engine.process_frame(frame)
 
         # Update unknown faces
-        with unknown_faces_lock:
-            for res in results:
-                if res["status"] == "Unknown":
-                    x, y, w, h = res["box"]
-                    # Ensure box is within frame
-                    h_img, w_img = frame.shape[:2]
-                    x, y = max(0, x), max(0, y)
-                    w, h = min(w, w_img - x), min(h, h_img - y)
+        for res in results:
+            if res["status"] == "Unknown":
+                x, y, w, h = res["box"]
+                # Ensure box is within frame
+                h_img, w_img = frame.shape[:2]
+                x, y = max(0, x), max(0, y)
+                w, h = min(w, w_img - x), min(h, h_img - y)
 
-                    face_crop = frame[y:y+h, x:x+w]
-                    if face_crop.size > 0:
+                face_crop = frame[y:y+h, x:x+w]
+                if face_crop.size > 0:
+                    with unknown_faces_lock:
+                        # Check if we already have this unknown face recently to avoid duplicates
+                        is_duplicate = False
+                        for existing in unknown_faces.values():
+                            dist = engine.cosine_distance(np.array(res["embedding"]), np.array(existing["embedding"]))
+                            if dist < engine.threshold:
+                                is_duplicate = True
+                                # Update timestamp to keep it fresh
+                                existing["timestamp"] = time.time()
+                                break
+
+                        if is_duplicate:
+                            continue
+
                         face_id = str(uuid.uuid4())
                         # We only keep the latest few unknowns to avoid memory/disk bloat
-                        if len(unknown_faces) >= 10:
+                        to_remove_path = None
+                        if len(unknown_faces) >= 50:
                             oldest_id = min(unknown_faces.keys(), key=lambda k: unknown_faces[k]["timestamp"])
-                            oldest_path = unknown_faces[oldest_id]["image_url"].lstrip('/')
-                            if os.path.exists(oldest_path):
-                                os.remove(oldest_path)
+                            to_remove_path = unknown_faces[oldest_id]["image_url"].lstrip('/')
                             del unknown_faces[oldest_id]
 
-                        # Save crop for UI
+                        # Add new entry
                         crop_path = f"static/unknown_{face_id}.jpg"
-                        cv2.imwrite(crop_path, face_crop)
-
                         unknown_faces[face_id] = {
                             "id": face_id,
                             "image_url": f"/{crop_path}",
                             "embedding": res["embedding"],
                             "timestamp": time.time()
                         }
+
+                    # Perform I/O outside the lock to minimize contention
+                    if to_remove_path and os.path.exists(to_remove_path):
+                        os.remove(to_remove_path)
+                    cv2.imwrite(crop_path, face_crop)
 
         ret, buffer = cv2.imencode('.jpg', processed_frame)
         frame_bytes = buffer.tobytes()
@@ -221,13 +236,13 @@ async def update_status(user_id: int = Form(...), status: str = Form(...), db: S
 @app.get("/unknown_faces")
 async def get_unknown_faces():
     # Return list of recent unknown faces
-    # Filter out old ones (e.g., older than 30 seconds)
+    # Filter out old ones (e.g., older than 5 minutes for better user experience)
     now = time.time()
     recent = []
     with unknown_faces_lock:
         to_delete = []
         for k, v in unknown_faces.items():
-            if now - v["timestamp"] > 30:
+            if now - v["timestamp"] > 300:
                 to_delete.append(k)
             else:
                 recent.append({"id": v["id"], "image_url": v["image_url"]})
