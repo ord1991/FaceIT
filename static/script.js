@@ -129,7 +129,11 @@ document.getElementById('registration-form').onsubmit = async (e) => {
             fetchUnknownFaces();
         } else {
             const err = await response.json();
-            alert('Error: ' + err.detail);
+            if (err.detail === "No face source provided") {
+                alert('Error: The face detection has expired or is no longer available. Please try clicking a recent detection again.');
+            } else {
+                alert('Error: ' + err.detail);
+            }
         }
     } catch (error) {
         console.error('Error adding user from tag:', error);
