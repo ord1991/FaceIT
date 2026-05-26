@@ -1,7 +1,27 @@
 import cv2
 import numpy as np
+import tensorflow as tf
 from deepface import DeepFace
 from database import User, SessionLocal
+
+# GPU Auto-detection and Configuration
+def _configure_gpu():
+    try:
+        physical_devices = tf.config.list_physical_devices('GPU')
+        if physical_devices:
+            # Enable dynamic memory allocation to prevent TensorFlow from taking all VRAM
+            for device in physical_devices:
+                tf.config.experimental.set_memory_growth(device, True)
+            print(f"✅ GPU detected and configured: {len(physical_devices)} device(s) found.")
+            return True
+        else:
+            print("ℹ️ No GPU detected. Processing will use CPU.")
+            return False
+    except Exception as e:
+        print(f"⚠️ Error configuring GPU: {e}. Falling back to CPU.")
+        return False
+
+HAS_GPU = _configure_gpu()
 
 class FaceEngine:
     def __init__(self, model_name="VGG-Face", detector_backend="opencv", threshold=0.4):
