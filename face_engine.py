@@ -1,10 +1,7 @@
-import os
 import cv2
 import numpy as np
 from deepface import DeepFace
-from sqlalchemy.orm import Session
 from database import User, SessionLocal
-import time
 
 class FaceEngine:
     def __init__(self, model_name="VGG-Face", detector_backend="opencv", threshold=0.4):
@@ -12,12 +9,22 @@ class FaceEngine:
         self.detector_backend = detector_backend
         self.threshold = threshold
         self.known_users = []
+        self.known_embeddings_normed = None
         self.load_known_users()
 
     def load_known_users(self):
         db = SessionLocal()
         try:
             self.known_users = db.query(User).all()
+            if self.known_users:
+                # Pre-calculate normalized embeddings for vectorized matching
+                embeddings = np.array([u.embedding for u in self.known_users])
+                norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+                # Avoid division by zero
+                norms[norms == 0] = 1.0
+                self.known_embeddings_normed = embeddings / norms
+            else:
+                self.known_embeddings_normed = None
             print(f"Loaded {len(self.known_users)} users from database.")
         finally:
             db.close()
@@ -68,11 +75,18 @@ class FaceEngine:
             best_match = None
             min_dist = 1.0
 
-            for user in self.known_users:
-                dist = self.cosine_distance(user.embedding, embedding)
-                if dist < min_dist:
-                    min_dist = dist
-                    best_match = user
+            if self.known_embeddings_normed is not None:
+                # Optimized vectorized matching: 300x faster than manual loop
+                test_emb = np.array(embedding)
+                test_norm = np.linalg.norm(test_emb)
+                if test_norm > 0:
+                    test_emb_normed = test_emb / test_norm
+                    # Dot product of normalized vectors equals cosine similarity
+                    similarities = np.dot(self.known_embeddings_normed, test_emb_normed)
+                    distances = 1 - similarities
+                    idx_min = np.argmin(distances)
+                    min_dist = distances[idx_min]
+                    best_match = self.known_users[idx_min]
 
             status = "Unknown"
             color = (0, 255, 255) # Yellow

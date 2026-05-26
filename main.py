@@ -3,13 +3,11 @@ import cv2
 import uuid
 import threading
 import time
-import glob
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form, Request
 from fastapi.responses import StreamingResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-import database
 from database import User, init_db, get_db
 from face_engine import FaceEngine
 import numpy as np
