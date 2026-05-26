@@ -14,6 +14,23 @@ import numpy as np
 
 app = FastAPI()
 
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    # Basic CSP: allow self, jQuery CDN, and inline styles (needed for some UI elements)
+    # Note: 'unsafe-inline' for script-src is avoided if possible,
+    # but some inline event handlers in templates may require it or need refactoring.
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' https://code.jquery.com 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:;"
+    )
+    return response
+
 # Ensure directories exist
 os.makedirs("faces", exist_ok=True)
 os.makedirs("static", exist_ok=True)
