@@ -1,16 +1,33 @@
 import cv2
 import numpy as np
+import tensorflow as tf
 from deepface import DeepFace
 from database import User, SessionLocal
 
 class FaceEngine:
     def __init__(self, model_name="VGG-Face", detector_backend="opencv", threshold=0.4):
+        self._setup_gpu()
         self.model_name = model_name
         self.detector_backend = detector_backend
         self.threshold = threshold
         self.known_users = []
         self.known_embeddings_normed = None
         self.load_known_users()
+
+    def _setup_gpu(self):
+        """Automatically detect and configure GPU if available."""
+        gpus = tf.config.list_physical_devices('GPU')
+        if gpus:
+            try:
+                # Set memory growth to prevent TensorFlow from allocating all VRAM at once
+                for gpu in gpus:
+                    tf.config.experimental.set_memory_growth(gpu, True)
+                print(f"Found {len(gpus)} GPU(s). GPU acceleration enabled.")
+            except RuntimeError as e:
+                # Memory growth must be set before GPUs have been initialized
+                print(f"GPU configuration error: {e}")
+        else:
+            print("No GPU detected. Running on CPU.")
 
     def load_known_users(self):
         db = SessionLocal()
