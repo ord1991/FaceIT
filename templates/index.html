@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceIT - Access Control</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Right Side: User Management -->
+        <div class="side-panel">
+            <div class="card">
+                <h3>Registered Users</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-list-body">
+                        <!-- Loaded via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Add New User (Upload)</h3>
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="upload-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="upload-status">
+                            <option value="approved">Approved</option>
+                            <option value="blacklisted">Blacklisted</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Image File</label>
+                        <input type="file" id="upload-file" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload & Register</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Center: Video Feed -->
+        <div class="main-feed">
+            <h2>Live Video Feed</h2>
+            <div class="video-container">
+                <img src="/video_feed" alt="Video Stream">
+            </div>
+        </div>
+
+        <!-- Left Side: Unknown Detections -->
+        <div class="side-panel">
+            <div class="card">
+                <h3>Recent Unknown Faces</h3>
+                <p><small>Click a face to register</small></p>
+                <div id="unknown-faces-container" class="unknown-list">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="overlay"></div>
+    <div id="registration-modal">
+        <h3>Register Face</h3>
+        <img id="reg-preview" src="" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
+        <form id="registration-form">
+            <input type="hidden" id="reg-face-id">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="reg-name" required>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="reg-status">
+                    <option value="approved">Approved</option>
+                    <option value="blacklisted">Blacklisted</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" class="btn btn-success" style="flex: 1;">Save</button>
+                <button type="button" class="btn btn-danger" onclick="closeModal()" style="flex: 1;">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

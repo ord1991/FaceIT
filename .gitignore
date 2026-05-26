@@ -1,0 +1,5 @@
+__pycache__/
+*.db
+faces/
+static/faces/
+.env
