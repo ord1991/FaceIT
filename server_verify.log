@@ -1,0 +1,61 @@
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34498]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1779791393.541400   41641 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1779791393.626947   41641 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1779791395.921230   41641 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+INFO:     Started server process [41641]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Loaded 0 users from database.
+Running in MOCK MODE
+INFO:     127.0.0.1:53188 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53188 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53188 - "GET /video_feed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53204 - "GET /static/script.js HTTP/1.1" 200 OK
+E0000 00:00:1779791407.853179   41945 cuda_platform.cc:52] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+INFO:     127.0.0.1:53204 - "GET /users HTTP/1.1" 200 OK
+W0000 00:00:1779791408.298821   41945 cpu_allocator_impl.cc:82] Allocation of 411041792 exceeds 10% of free system memory.
+W0000 00:00:1779791409.217326   41945 cpu_allocator_impl.cc:82] Allocation of 411041792 exceeds 10% of free system memory.
+INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+W0000 00:00:1779791410.292204   41945 cpu_allocator_impl.cc:82] Allocation of 411041792 exceeds 10% of free system memory.
+Downloading...
+From: https://github.com/serengil/deepface_models/releases/download/v1.0/vgg_face_weights.h5
+To: /home/jules/.deepface/weights/vgg_face_weights.h5
+26-05-26 10:30:11 - 🔗 vgg_face_weights.h5 will be downloaded from https://github.com/serengil/deepface_models/releases/download/v1.0/vgg_face_weights.h5 to /home/jules/.deepface/weights/vgg_face_weights.h5...
+  0%|          | 0.00/580M [00:00<?, ?B/s]  2%|▏         | 8.91M/580M [00:00<00:06, 88.9MB/s]  6%|▌         | 33.0M/580M [00:00<00:03, 177MB/s] INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 10%|█         | 60.8M/580M [00:00<00:02, 222MB/s] 16%|█▌        | 91.8M/580M [00:00<00:01, 256MB/s] 20%|██        | 117M/580M [00:00<00:02, 229MB/s]  25%|██▍       | 145M/580M [00:00<00:01, 242MB/s] 29%|██▉       | 169M/580M [00:00<00:01, 231MB/s] 33%|███▎      | 193M/580M [00:00<00:01, 223MB/s] 37%|███▋      | 215M/580M [00:00<00:01, 216MB/s] 41%|████      | 238M/580M [00:01<00:01, 212MB/s] 45%|████▍     | 259M/580M [00:01<00:01, 211MB/s] 48%|████▊     | 280M/580M [00:01<00:02, 115MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 51%|█████     | 297M/580M [00:02<00:05, 54.1MB/s] 53%|█████▎    | 309M/580M [00:02<00:06, 42.9MB/s] 55%|█████▍    | 319M/580M [00:03<00:07, 34.6MB/s] 56%|█████▌    | 326M/580M [00:03<00:07, 32.1MB/s] 57%|█████▋    | 332M/580M [00:04<00:08, 28.9MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 58%|█████▊    | 337M/580M [00:04<00:08, 27.8MB/s] 59%|█████▊    | 341M/580M [00:04<00:09, 26.2MB/s] 59%|█████▉    | 344M/580M [00:04<00:09, 24.3MB/s] 60%|█████▉    | 348M/580M [00:04<00:09, 25.2MB/s] 60%|██████    | 351M/580M [00:04<00:10, 22.4MB/s] 61%|██████    | 353M/580M [00:05<00:09, 22.9MB/s] 61%|██████▏   | 356M/580M [00:05<00:09, 23.4MB/s] 62%|██████▏   | 359M/580M [00:05<00:11, 19.8MB/s] 62%|██████▏   | 361M/580M [00:05<00:10, 20.9MB/s] 63%|██████▎   | 364M/580M [00:05<00:09, 21.9MB/s] 63%|██████▎   | 366M/580M [00:05<00:09, 22.8MB/s] 64%|██████▎   | 369M/580M [00:05<00:11, 18.8MB/s] 64%|██████▍   | 371M/580M [00:05<00:10, 19.2MB/s] 64%|██████▍   | 374M/580M [00:06<00:09, 20.8MB/s] 65%|██████▍   | 376M/580M [00:06<00:09, 22.0MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 65%|██████▌   | 379M/580M [00:06<00:08, 22.9MB/s] 66%|██████▌   | 382M/580M [00:06<00:08, 23.6MB/s] 66%|██████▌   | 384M/580M [00:06<00:10, 19.0MB/s] 67%|██████▋   | 386M/580M [00:06<00:10, 19.3MB/s] 67%|██████▋   | 388M/580M [00:06<00:09, 19.7MB/s] 67%|██████▋   | 391M/580M [00:06<00:09, 19.9MB/s] 68%|██████▊   | 393M/580M [00:07<00:09, 20.1MB/s] 68%|██████▊   | 395M/580M [00:07<00:09, 20.2MB/s] 68%|██████▊   | 397M/580M [00:07<00:09, 20.3MB/s] 69%|██████▉   | 399M/580M [00:07<00:08, 20.4MB/s] 69%|██████▉   | 401M/580M [00:07<00:08, 20.4MB/s] 70%|██████▉   | 403M/580M [00:07<00:08, 20.5MB/s] 70%|██████▉   | 406M/580M [00:07<00:07, 22.0MB/s] 70%|███████   | 408M/580M [00:07<00:07, 23.0MB/s] 71%|███████   | 411M/580M [00:07<00:07, 23.5MB/s] 71%|███████▏  | 414M/580M [00:07<00:06, 24.1MB/s] 72%|███████▏  | 416M/580M [00:08<00:08, 19.2MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 72%|███████▏  | 418M/580M [00:08<00:08, 19.5MB/s] 72%|███████▏  | 420M/580M [00:08<00:08, 19.8MB/s] 73%|███████▎  | 423M/580M [00:08<00:07, 20.0MB/s] 73%|███████▎  | 425M/580M [00:08<00:07, 20.1MB/s] 74%|███████▎  | 427M/580M [00:08<00:07, 20.3MB/s] 74%|███████▍  | 429M/580M [00:08<00:07, 20.3MB/s] 74%|███████▍  | 431M/580M [00:08<00:07, 20.4MB/s] 75%|███████▍  | 433M/580M [00:08<00:07, 20.4MB/s] 75%|███████▌  | 436M/580M [00:09<00:06, 21.9MB/s] 76%|███████▌  | 438M/580M [00:09<00:06, 22.9MB/s] 76%|███████▌  | 441M/580M [00:09<00:05, 23.7MB/s] 76%|███████▋  | 444M/580M [00:09<00:05, 24.0MB/s] 77%|███████▋  | 446M/580M [00:09<00:06, 19.2MB/s] 77%|███████▋  | 448M/580M [00:09<00:06, 19.5MB/s] 78%|███████▊  | 450M/580M [00:09<00:06, 19.8MB/s] 78%|███████▊  | 452M/580M [00:09<00:06, 20.0MB/s] 78%|███████▊  | 455M/580M [00:09<00:06, 20.1MB/s] 79%|███████▊  | 457M/580M [00:10<00:06, 20.3MB/s] 79%|███████▉  | 459M/580M [00:10<00:05, 20.4MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 79%|███████▉  | 461M/580M [00:10<00:05, 20.4MB/s] 80%|███████▉  | 463M/580M [00:10<00:05, 20.4MB/s] 80%|████████  | 465M/580M [00:10<00:05, 20.5MB/s] 81%|████████  | 468M/580M [00:10<00:05, 22.0MB/s] 81%|████████  | 470M/580M [00:10<00:04, 23.0MB/s] 82%|████████▏ | 473M/580M [00:10<00:04, 23.6MB/s] 82%|████████▏ | 476M/580M [00:10<00:04, 24.2MB/s] 82%|████████▏ | 478M/580M [00:11<00:05, 19.1MB/s] 83%|████████▎ | 480M/580M [00:11<00:05, 19.5MB/s] 83%|████████▎ | 482M/580M [00:11<00:04, 19.7MB/s] 84%|████████▎ | 484M/580M [00:11<00:04, 20.0MB/s] 84%|████████▍ | 487M/580M [00:11<00:04, 20.2MB/s] 84%|████████▍ | 489M/580M [00:11<00:04, 20.2MB/s] 85%|████████▍ | 491M/580M [00:11<00:04, 20.3MB/s] 85%|████████▍ | 493M/580M [00:11<00:04, 20.4MB/s] 85%|████████▌ | 495M/580M [00:11<00:04, 20.4MB/s] 86%|████████▌ | 498M/580M [00:12<00:03, 21.9MB/s] 86%|████████▌ | 500M/580M [00:12<00:03, 22.9MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 87%|████████▋ | 503M/580M [00:12<00:03, 23.6MB/s] 87%|████████▋ | 505M/580M [00:12<00:03, 24.2MB/s] 88%|████████▊ | 508M/580M [00:12<00:03, 19.1MB/s] 88%|████████▊ | 510M/580M [00:12<00:03, 19.5MB/s] 88%|████████▊ | 512M/580M [00:12<00:03, 19.7MB/s] 89%|████████▊ | 514M/580M [00:12<00:03, 19.9MB/s] 89%|████████▉ | 516M/580M [00:12<00:03, 20.1MB/s] 89%|████████▉ | 519M/580M [00:13<00:03, 20.2MB/s] 90%|████████▉ | 521M/580M [00:13<00:02, 20.3MB/s] 90%|█████████ | 523M/580M [00:13<00:02, 20.4MB/s] 91%|█████████ | 525M/580M [00:13<00:02, 21.9MB/s] 91%|█████████ | 528M/580M [00:13<00:02, 22.9MB/s] 91%|█████████▏| 531M/580M [00:13<00:02, 23.7MB/s] 92%|█████████▏| 533M/580M [00:13<00:01, 24.2MB/s] 92%|█████████▏| 536M/580M [00:13<00:02, 19.2MB/s] 93%|█████████▎| 538M/580M [00:13<00:02, 19.5MB/s] 93%|█████████▎| 540M/580M [00:14<00:02, 19.8MB/s] 93%|█████████▎| 542M/580M [00:14<00:01, 20.0MB/s]INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+ 94%|█████████▍| 544M/580M [00:14<00:01, 20.2MB/s] 94%|█████████▍| 546M/580M [00:14<00:01, 20.2MB/s] 95%|█████████▍| 548M/580M [00:14<00:01, 20.4MB/s] 95%|█████████▍| 551M/580M [00:14<00:01, 20.4MB/s] 95%|█████████▌| 553M/580M [00:14<00:01, 20.5MB/s] 96%|█████████▌| 555M/580M [00:14<00:01, 20.5MB/s] 96%|█████████▌| 557M/580M [00:14<00:01, 20.5MB/s] 96%|█████████▋| 559M/580M [00:14<00:01, 20.5MB/s] 97%|█████████▋| 562M/580M [00:15<00:00, 22.0MB/s] 97%|█████████▋| 564M/580M [00:15<00:00, 23.0MB/s] 98%|█████████▊| 567M/580M [00:15<00:00, 23.8MB/s] 98%|█████████▊| 569M/580M [00:15<00:00, 24.3MB/s] 99%|█████████▊| 572M/580M [00:15<00:00, 19.1MB/s] 99%|█████████▉| 574M/580M [00:15<00:00, 19.5MB/s] 99%|█████████▉| 576M/580M [00:15<00:00, 19.8MB/s]100%|█████████▉| 578M/580M [00:15<00:00, 20.0MB/s]100%|██████████| 580M/580M [00:15<00:00, 36.5MB/s]
+INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+W0000 00:00:1779791435.446783   41945 cpu_allocator_impl.cc:82] Allocation of 411041792 exceeds 10% of free system memory.
+INFO:     127.0.0.1:53204 - "GET /unknown_faces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40298 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40298 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40304 - "GET /video_feed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40314 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40314 - "GET /users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40314 - "GET /unknown_faces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40314 - "GET /static/unknown_684461e4-062c-46fe-b997-a22ae6f0dc7e.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40298 - "GET /static/unknown_5e7b924e-7b1c-4626-90e7-9a6cc8899310.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40322 - "GET /static/unknown_51c2b1f5-5495-484f-8158-71486b1824b6.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40348 - "GET /static/unknown_f882b2dd-d944-4340-a690-24af4f6e92e1.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40336 - "GET /static/unknown_ef0ba6e8-0817-456c-91c5-7db1ec9ed74d.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40322 - "GET /static/unknown_f122642a-a2da-4df3-ab9e-96d14d0fb1ae.jpg HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41641]
