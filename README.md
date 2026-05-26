@@ -44,7 +44,7 @@ FaceIT is a high-performance, real-time face recognition system designed for acc
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ord1991/FaceIT
    cd FaceIT
    ```
 
