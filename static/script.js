@@ -16,19 +16,23 @@ async function fetchUsers() {
             const actionClass = isApproved ? 'btn-danger' : 'btn-success';
             const nextStatus = isApproved ? 'blacklisted' : 'approved';
 
-            tr.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.status}</td>
-                <td>
-                    <button
-                        class="btn btn-sm ${actionClass}"
-                        onclick="updateStatus(${user.id}, '${nextStatus}')"
-                        aria-label="${actionText} ${user.name}"
-                    >
-                        ${actionText}
-                    </button>
-                </td>
-            `;
+            const nameTd = document.createElement('td');
+            nameTd.textContent = user.name;
+
+            const statusTd = document.createElement('td');
+            statusTd.textContent = user.status;
+
+            const actionTd = document.createElement('td');
+            const actionBtn = document.createElement('button');
+            actionBtn.className = `btn btn-sm ${actionClass}`;
+            actionBtn.textContent = actionText;
+            actionBtn.setAttribute('aria-label', `${actionText} ${user.name}`);
+            actionBtn.onclick = () => updateStatus(user.id, nextStatus);
+            actionTd.appendChild(actionBtn);
+
+            tr.appendChild(nameTd);
+            tr.appendChild(statusTd);
+            tr.appendChild(actionTd);
             tbody.appendChild(tr);
         });
     } catch (error) {
