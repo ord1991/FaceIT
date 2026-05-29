@@ -109,15 +109,20 @@ def generate_frames():
                 face_crop = frame[y:y+h, x:x+w]
                 if face_crop.size > 0:
                     with unknown_faces_lock:
-                        # Check if we already have this unknown face recently to avoid duplicates
+                        # Optimized vectorized duplicate check
                         is_duplicate = False
-                        for existing in unknown_faces.values():
-                            dist = engine.cosine_distance(np.array(res["embedding"]), np.array(existing["embedding"]))
-                            if dist < engine.threshold:
+                        if unknown_faces:
+                            existing_embs = np.array([f["embedding_normed"] for f in unknown_faces.values()])
+                            new_emb = np.array(res["embedding_normed"])
+                            # Dot product of normalized vectors
+                            similarities = np.dot(existing_embs, new_emb)
+                            max_sim = np.max(similarities)
+                            if (1 - max_sim) < engine.threshold:
                                 is_duplicate = True
-                                # Update timestamp to keep it fresh
-                                existing["timestamp"] = time.time()
-                                break
+                                # Update timestamp for the best match to keep it fresh
+                                idx_max = np.argmax(similarities)
+                                matched_id = list(unknown_faces.keys())[idx_max]
+                                unknown_faces[matched_id]["timestamp"] = time.time()
 
                         if is_duplicate:
                             continue
@@ -136,6 +141,7 @@ def generate_frames():
                             "id": face_id,
                             "image_url": f"/{crop_path}",
                             "embedding": res["embedding"],
+                            "embedding_normed": res["embedding_normed"],
                             "timestamp": time.time()
                         }
 
@@ -144,7 +150,8 @@ def generate_frames():
                         os.remove(to_remove_path)
                     cv2.imwrite(crop_path, face_crop)
 
-        ret, buffer = cv2.imencode('.jpg', processed_frame)
+        # Reduced JPEG quality (80) for faster encoding and smaller network payload
+        ret, buffer = cv2.imencode('.jpg', processed_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
         frame_bytes = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
@@ -157,12 +164,12 @@ async def video_feed():
     return StreamingResponse(generate_frames(), media_type="multipart/x-mixed-replace; boundary=frame")
 
 @app.get("/users")
-async def list_users(db: Session = Depends(get_db)):
+def list_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return [{"id": u.id, "name": u.name, "status": u.status, "image_path": u.image_path} for u in users]
 
 @app.post("/users/add")
-async def add_user(
+def add_user(
     name: str = Form(...),
     status: str = Form(...),
     face_id: str = Form(None), # From quick-tagging
@@ -188,22 +195,18 @@ async def add_user(
 
     if embedding is None and file:
         # From file upload
-        contents = await file.read()
+        contents = file.file.read()
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        # Get embedding
-        temp_path = f"temp_{uuid.uuid4()}.jpg"
-        cv2.imwrite(temp_path, img)
-        embedding = engine.get_embedding(temp_path)
+        # Get embedding directly from image array
+        embedding = engine.get_embedding(img)
 
         if embedding:
             image_name = f"{uuid.uuid4()}.jpg"
             image_path = f"faces/{image_name}"
             cv2.imwrite(image_path, img)
-            os.remove(temp_path)
         else:
-            os.remove(temp_path)
             raise HTTPException(status_code=400, detail="No face detected in uploaded image")
 
     if embedding is None:
@@ -224,7 +227,7 @@ async def add_user(
     return {"status": "success", "user_id": new_user.id}
 
 @app.post("/users/update_status")
-async def update_status(user_id: int = Form(...), status: str = Form(...), db: Session = Depends(get_db)):
+def update_status(user_id: int = Form(...), status: str = Form(...), db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
