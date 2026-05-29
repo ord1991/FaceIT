@@ -248,11 +248,12 @@ def update_status(user_id: int = Form(...), status: str = Form(...), db: Session
     return {"status": "success"}
 
 @app.get("/unknown_faces")
-async def get_unknown_faces():
+def get_unknown_faces():
     # Return list of recent unknown faces
     # Filter out old ones (e.g., older than 5 minutes for better user experience)
     now = time.time()
     recent = []
+    paths_to_delete = []
     with unknown_faces_lock:
         to_delete = []
         for k, v in unknown_faces.items():
@@ -262,10 +263,12 @@ async def get_unknown_faces():
                 recent.append({"id": v["id"], "image_url": v["image_url"]})
 
         for k in to_delete:
-            path = unknown_faces[k]["image_url"].lstrip('/')
-            if os.path.exists(path):
-                os.remove(path)
+            paths_to_delete.append(unknown_faces[k]["image_url"].lstrip('/'))
             del unknown_faces[k]
+
+    for path in paths_to_delete:
+        if os.path.exists(path):
+            os.remove(path)
 
     return recent
 
