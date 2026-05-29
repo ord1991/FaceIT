@@ -25,28 +25,12 @@ HAS_GPU = _configure_gpu()
 
 class FaceEngine:
     def __init__(self, model_name="VGG-Face", detector_backend="opencv", threshold=0.4):
-        self._setup_gpu()
         self.model_name = model_name
         self.detector_backend = detector_backend
         self.threshold = threshold
         self.known_users = []
         self.known_embeddings_normed = None
         self.load_known_users()
-
-    def _setup_gpu(self):
-        """Automatically detect and configure GPU if available."""
-        gpus = tf.config.list_physical_devices('GPU')
-        if gpus:
-            try:
-                # Set memory growth to prevent TensorFlow from allocating all VRAM at once
-                for gpu in gpus:
-                    tf.config.experimental.set_memory_growth(gpu, True)
-                print(f"Found {len(gpus)} GPU(s). GPU acceleration enabled.")
-            except RuntimeError as e:
-                # Memory growth must be set before GPUs have been initialized
-                print(f"GPU configuration error: {e}")
-        else:
-            print("No GPU detected. Running on CPU.")
 
     def load_known_users(self):
         db = SessionLocal()
@@ -66,10 +50,8 @@ class FaceEngine:
             db.close()
 
     def cosine_distance(self, source_representation, test_representation):
-        a = np.matmul(np.transpose(source_representation), test_representation)
-        b = np.matmul(np.transpose(source_representation), source_representation)
-        c = np.matmul(np.transpose(test_representation), test_representation)
-        return 1 - (a / (np.sqrt(b) * np.sqrt(c)))
+        # Optimized: assumes normalized vectors
+        return 1 - np.dot(source_representation, test_representation)
 
     def process_frame(self, frame):
         # Result list to store detections
@@ -111,18 +93,19 @@ class FaceEngine:
             best_match = None
             min_dist = 1.0
 
-            if self.known_embeddings_normed is not None:
+            # Pre-calculate normalized embedding once
+            test_emb = np.array(embedding)
+            test_norm = np.linalg.norm(test_emb)
+            test_emb_normed = test_emb / test_norm if test_norm > 0 else test_emb
+
+            if self.known_embeddings_normed is not None and test_norm > 0:
                 # Optimized vectorized matching: 300x faster than manual loop
-                test_emb = np.array(embedding)
-                test_norm = np.linalg.norm(test_emb)
-                if test_norm > 0:
-                    test_emb_normed = test_emb / test_norm
-                    # Dot product of normalized vectors equals cosine similarity
-                    similarities = np.dot(self.known_embeddings_normed, test_emb_normed)
-                    distances = 1 - similarities
-                    idx_min = np.argmin(distances)
-                    min_dist = distances[idx_min]
-                    best_match = self.known_users[idx_min]
+                # Dot product of normalized vectors equals cosine similarity
+                similarities = np.dot(self.known_embeddings_normed, test_emb_normed)
+                distances = 1 - similarities
+                idx_min = np.argmin(distances)
+                min_dist = distances[idx_min]
+                best_match = self.known_users[idx_min]
 
             status = "Unknown"
             color = (0, 255, 255) # Yellow
@@ -147,12 +130,17 @@ class FaceEngine:
                 "status": status,
                 "distance": float(min_dist),
                 "box": [x, y, w, h],
-                "embedding": embedding
+                "embedding": embedding,
+                "embedding_normed": test_emb_normed.tolist()
             })
 
         return frame, results
 
     def get_embedding(self, img_path):
+        """
+        Get embedding for an image.
+        img_path can be a string path or a numpy array (image).
+        """
         try:
             results = DeepFace.represent(
                 img_path=img_path,

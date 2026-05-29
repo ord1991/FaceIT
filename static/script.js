@@ -4,18 +4,35 @@ async function fetchUsers() {
         const users = await response.json();
         const tbody = document.getElementById('user-list-body');
         tbody.innerHTML = '';
+        if (users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: #7f8c8d;">No users registered</td></tr>';
+            return;
+        }
         users.forEach(user => {
             const tr = document.createElement('tr');
             tr.className = `status-${user.status}`;
-            tr.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.status}</td>
-                <td>
-                    <button class="btn btn-sm" onclick="updateStatus(${user.id}, '${user.status === 'approved' ? 'blacklisted' : 'approved'}')">
-                        Toggle Status
-                    </button>
-                </td>
-            `;
+            const isApproved = user.status === 'approved';
+            const actionText = isApproved ? 'Blacklist' : 'Approve';
+            const actionClass = isApproved ? 'btn-danger' : 'btn-success';
+            const nextStatus = isApproved ? 'blacklisted' : 'approved';
+
+            const nameTd = document.createElement('td');
+            nameTd.textContent = user.name;
+
+            const statusTd = document.createElement('td');
+            statusTd.textContent = user.status;
+
+            const actionTd = document.createElement('td');
+            const actionBtn = document.createElement('button');
+            actionBtn.className = `btn btn-sm ${actionClass}`;
+            actionBtn.textContent = actionText;
+            actionBtn.setAttribute('aria-label', `${actionText} ${user.name}`);
+            actionBtn.onclick = () => updateStatus(user.id, nextStatus);
+            actionTd.appendChild(actionBtn);
+
+            tr.appendChild(nameTd);
+            tr.appendChild(statusTd);
+            tr.appendChild(actionTd);
             tbody.appendChild(tr);
         });
     } catch (error) {
@@ -30,9 +47,11 @@ async function fetchUnknownFaces() {
         const container = document.getElementById('unknown-faces-container');
         container.innerHTML = '';
         faces.forEach(face => {
-            const item = document.createElement('div');
+            const item = document.createElement('button');
             item.className = 'unknown-item';
+            item.type = 'button';
             item.onclick = () => openModal(face.id, face.image_url);
+            item.setAttribute('aria-label', 'Register this face');
             item.innerHTML = `<img src="${face.image_url}" alt="Unknown face">`;
             container.appendChild(item);
         });
