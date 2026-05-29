@@ -72,8 +72,8 @@
 
     <!-- Registration Modal -->
     <div id="overlay"></div>
-    <div id="registration-modal">
-        <h3>Register Face</h3>
+    <div id="registration-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+        <h3 id="modal-title">Register Face</h3>
         <img id="reg-preview" src="" alt="Face crop for registration" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
         <form id="registration-form">
             <input type="hidden" id="reg-face-id">

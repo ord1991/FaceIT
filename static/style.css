@@ -8,7 +8,8 @@ body { font-family: sans-serif; background: #f4f7f6; color: #2c3e50; margin: 0; 
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; margin-bottom: 5px; }
 .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #dfe6e9; border-radius: 4px; }
-.btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: box-shadow 0.2s; }
+.btn:focus-visible { outline: 2px solid #3498db; outline-offset: 2px; box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.3); }
 .btn-primary { background: #3498db; color: #fff; }
 .btn-success { background: #2ecc71; color: #fff; }
 .btn-danger { background: #e74c3c; color: #fff; }
@@ -18,8 +19,8 @@ body { font-family: sans-serif; background: #f4f7f6; color: #2c3e50; margin: 0; 
 #registration-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 20px; border-radius: 8px; display: none; z-index: 11; width: 90%; max-width: 400px; }
 
 .unknown-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
-.unknown-item { width: 80px; height: 80px; border-radius: 4px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s; }
-.unknown-item:hover { transform: scale(1.1); border-color: #3498db; }
+.unknown-item { width: 80px; height: 80px; border-radius: 4px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s; padding: 0; background: none; }
+.unknown-item:hover, .unknown-item:focus-visible { transform: scale(1.1); border-color: #3498db; outline: none; box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.3); }
 .unknown-item img { width: 100%; height: 100%; object-fit: cover; }
 
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
