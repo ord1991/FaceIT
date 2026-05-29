@@ -162,7 +162,7 @@ async def list_users(db: Session = Depends(get_db)):
     return [{"id": u.id, "name": u.name, "status": u.status, "image_path": u.image_path} for u in users]
 
 @app.post("/users/add")
-async def add_user(
+def add_user(
     name: str = Form(...),
     status: str = Form(...),
     face_id: str = Form(None), # From quick-tagging
@@ -188,7 +188,7 @@ async def add_user(
 
     if embedding is None and file:
         # From file upload
-        contents = await file.read()
+        contents = file.file.read()
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
