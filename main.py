@@ -176,6 +176,13 @@ def add_user(
     file: UploadFile = File(None), # From upload
     db: Session = Depends(get_db)
 ):
+    # Input validation
+    if not name or len(name.strip()) == 0 or len(name) > 100:
+        raise HTTPException(status_code=400, detail="Invalid name. Name must be between 1 and 100 characters.")
+
+    if status not in ["approved", "blacklisted"]:
+        raise HTTPException(status_code=400, detail="Invalid status. Status must be 'approved' or 'blacklisted'.")
+
     embedding = None
     image_path = None
 
@@ -228,6 +235,10 @@ def add_user(
 
 @app.post("/users/update_status")
 def update_status(user_id: int = Form(...), status: str = Form(...), db: Session = Depends(get_db)):
+    # Input validation
+    if status not in ["approved", "blacklisted"]:
+        raise HTTPException(status_code=400, detail="Invalid status. Status must be 'approved' or 'blacklisted'.")
+
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
